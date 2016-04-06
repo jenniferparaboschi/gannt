@@ -65,10 +65,11 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
     
     <br><br>
 
-    <h3>Upload your CSV:</h3>
+    <h3>Upload your CSV or XLSX:</h3>
     <input type=file id=files />
     <button id=upload>Upload</button> Scaling: <input type="text" id="scalefactor" value="1" size="1"><br><br><br><br>
-    <a id="savelink">Save the Gannt chart below as SVG</a>
+   <!--  <a id="savelink">Save the Gannt chart below as SVG</a>; <a id="savelinkPNG"> PNG</a>; <a id="savelinkJPG"> JPG</a> -->
+    Save the Gannt chart below as <button  onclick="saveChart('svg');">SVG</button><button  onclick="saveChart('png');">PNG</button><button  onclick="saveChart('jpg');">JPG</button>
     <br/><br/>
     <svg id="chart">
         <style>
@@ -448,26 +449,50 @@ function PlotGanntChart(data) {
     svg.attr("width",scalingfactor*(width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
     bg.attr("width",scalingfactor*(width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
     //svg.style("background-color",BGColor);
+};
 
+function getSVGsource() {
 
-    function outerHTML(el) {
-        var outer = document.createElement('div');
-        outer.appendChild(el.cloneNode(true));
-        return outer.innerHTML;
-    }
+    var outer = document.createElement('div');
 
-    source = outerHTML(svg
+    outer.appendChild(d3.select("#chart")
         .attr("title", "test2")
         .attr("version", 1.1)
         .attr("xmlns", "http://www.w3.org/2000/svg")
-        .node());
+        .node().cloneNode(true));
 
-    //convert svg source to URI data scheme.
-    var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+    return outer.innerHTML;
+};
 
-    //set url value to a element's href attribute.
-    d3.select("#savelink").attr("href",url).attr("download",(fname || "GanntTemplate")+".svg");
+function CreateAAndClick(type,href) {
+    var a = document.createElement('a');
+    a.id="savetemplink";
+    a.download = (fname || "GanntTemplate")+"."+type;
+    a.href = href;
+    document.body.appendChild(a);
+    a.click();
+    document.getElementById(a.id).remove();
+};
 
+function saveChart(type) {
+    var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(getSVGsource());
+    if (type==="svg")
+        CreateAAndClick("svg",url);
+    else {
+        var image = new Image();
+        image.src = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(getSVGsource());
+        image.onload = function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            var context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0);
+            if (type==="png")
+                CreateAAndClick("png",canvas.toDataURL('image/png'));
+            else if (type==="jpg")
+                CreateAAndClick("jpg",canvas.toDataURL('image/jpeg'),0.98);
+        };
+    };
 };
 
 PlotGanntChart(example);
