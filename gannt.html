@@ -29,9 +29,13 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
+        font-family: Avenir;
     }
     li {
         padding: 5px;
+    }
+    body {
+        font-family: Arial;
     }
 </style>
 
@@ -42,12 +46,19 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
         <ol>
             <li>Prepare the data in Excel (or anything else that can save CSV or XLSX) according to the template table below:</li>
             <ul>
+                <li>The column order is as follows:
+                        <p>
+                        1) Task names. Has to be the first column. The column name is changeable and will be printed on the chart.<br>
+                        2) "Ongoing work" column, i.e. the one represented as bars. Has to be the second column. Has to have date periods inside (that is, dates separated by hyphen, like "02/06/16-08/06/16"). The column name  is changeable and will be on printed in the chart legend.<br>
+                        3,4,...) Events columns. Have to have dates inside. If date period rather than a date is set, then "Periodicity" has to be set to something too.<br>
+                        Last) The last three columns are "Periodicity", "Group" and "Footnote", in any order, but the names have to be these.
+                        </p>
                 <li>For periods, the dates have to be separated by the hyphen "-"</li>
                 <li>If you need to several events at specific dates or several periods, they have to be separated by comma ","</li>
-                <li>First column has to be the names of the tasks. The column name is changeable and will be on printed on the chart.</li>
-                <li>Second column has to be for Ongoing Work, i.e. the one represented as bars. The column name  is changeable and will be on printed in the chart legend.</li>
-                <li>The following (3rd and on) columns are for different type of events, if you need more than one. The example below has two types of events (Delivarable and Milestone). If you need more, just add a column for them. If you only need one, remove one of the columns. You can change the names of event columns. They will be printed in the legend.</li>
-                <li>"Periodicity" column is for automatic multiplication of periodic events. Events will be created at indicated interval ("Biweekly", "Monthly", "Quarterly" or "Yearly") within the period indicated in the event column. The name has to be "Periodicity".</li>
+                <li> 3rd and on columns are for different type of events, if you need more than one. The example below has two types of events (Delivarable and Milestone). If you need more, just add a column for them. If you only need one, remove one of the columns. You can change the names of event columns. They will be printed in the legend.</li>
+                <li>"Periodicity" column is for automatic multiplication of periodic events. Events will be created at indicated interval ("Biweekly", "Monthly", "Quarterly" or "Yearly") within the period indicated in the event column. 
+                <li>If you put a date period (that is, dates separated by hyphen, like "02/06/16-08/06/16") rather than just one date or a number dates separated by come, then you also HAVE TO set the Periodicity column to something. (Otherwise it will default to "Monthly")
+                <li>If you use "Periodicity", you should only indicate a period within which to multiply the events. For instance, if you only have a year long and set 4 dates for quarterly events manually, there is no need to also put "Quarterly" in the "Periodicity" column. The name has to be "Periodicity".</li>
                 <li>"Group" column is for when you want to split the chart into groups of tasks / sections. If Group column value is not empty, the line will be treated as a group caption. It may have dates assigned to it in the Ongoing column too. (e.g. it can stretch from first task to the last task within that group)</li>
                 <li>"Footnote" column contains all the footnotes. They are not actually connected to the lines. All the footnotes in this column will be printed below the task labels in the chart</li>
 
@@ -60,7 +71,7 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
         </ol>
     </div>
     <a download="GanntTemplate.csv" href="#" onclick="return ExcellentExport.csv(this, 'example');">Download this template table as CSV</a> (You can then open it in Excel and plug your data)<br>
-    <a download="GanntTemplate.xls" href="#" onclick="return ExcellentExport.excel(this, 'example', 'Gannt');">Export table to Excel</a><br>
+    <!-- <a download="GanntTemplate.xls" href="#" onclick="return ExcellentExport.excel(this, 'example', 'Gannt');">Export table to Excel</a><br> -->
     <table id="example"></table>
     
     <br><br>
@@ -155,7 +166,7 @@ melt=function(n){"use strict";function r(n){for(var r={},n=n||[],t=0;t<n.length;
 
 <script>
 
-var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"10/10/2016","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Scope of Work Finalization With CEO ","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"Yes","Footnote":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change"},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Implementation ","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Analysis ","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"Yes","Footnote":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Monthly","Group":"","Footnote":""},{"TASK":"Open Door Policy ","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":""}];
+var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"10/10/16","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Scope of Work Finalization With CEO ","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"5/20/17,7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change"},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"12/30/16","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Implementation ","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"3/31/17","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Analysis ","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"5/30/17","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/31/2016-3/30/2018","Milestone":"","Periodicity":"Monthly","Group":"","Footnote":""},{"TASK":"Open Door Policy ","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":""}];
 
 function PrintTable(example) {
     d3.select("#example").html("");
@@ -167,7 +178,19 @@ function PrintTable(example) {
             for (var j in d)
                  row.append("td").text(d[j]);
         });
+        // for (var i=0; i<example.length; i++) {
+        //     var row=d3.select("#example").append("tr");
+        //     for (var j in example[i])
+        //          row.append("td").data([{"row":i,"col":j,"data":example}]).text(example[i][j]).attr("contenteditable",true)
+        //             .on('mouseout',function(d) {
+        //                 d.data[d.row][d.col]=this.innerText;
+        //                 PlotGanntChart(d.data);
+        //             });
+        // };
 };
+
+//console.log(obj)
+function editcell(d,j)  {console.log(d,j)};
 
 function to_csv(workbook) {
     var result = [];
@@ -217,6 +240,7 @@ uploadButton.on('click', function() {
 function PlotGanntChart(data) {
 
     PrintTable(data);
+    //d3.selectAll("body").append("text").text(JSON.stringify(data));
 
     var margin = {top: 20, right: 20, bottom: 20, left: 10};
     //Find the field name for Ongoing work and TaskLabel
@@ -244,11 +268,21 @@ function PlotGanntChart(data) {
             });
     }); data=data1;
 
-    function MultiplyEvents(arr, d, i, num, per) {
+    function SplitDatePeriod(d) {
+        var taskevent=d[TaskLabel]+" / "+d.Type;
         var sded = d.Date.split("-"),
             sd = new Date(sded[0]);
+            if (sded[0] && isNaN( sd.getTime() ) ) alert("Invalid start date "+sded[0]+" in "+taskevent);
             ed = new Date(sded[1]);
-        arr[i].Date = new Date(sded[0]);
+            if (sded[1] && isNaN( ed.getTime() ) ) alert("Invalid end date "+sded[1]+" in "+taskevent);
+        if (sded.length>2) alert("Date period in "+taskevent+" is split into more than 2 dates: " +sded);
+        return [sd,ed];
+    };
+   
+
+    function MultiplyEvents(arr, d, i, num, per) {
+        [sd,ed] = SplitDatePeriod(d);
+        arr[i].Date = sd;
         var cd = per.offset(sd,num);     
         for (var im=num; cd<ed; im += num) {
             var rec=JSON.parse(JSON.stringify(d));
@@ -260,19 +294,23 @@ function PlotGanntChart(data) {
 
     data.forEach(function(d,i) {
         if (d.Type === Ongoing) {
-            var sded = d.Date.split("-");
-            d.Date = new Date(sded[0]);
-            d.EndDate = new Date(sded[1]);
+            [d.Date,d.EndDate] = SplitDatePeriod(d);
         } else {
             if ((d["Periodicity"]==="Biweekly")) MultiplyEvents(data, d, i, 14, d3.time.day);
             else if ((d["Periodicity"]==="Monthly")) MultiplyEvents(data, d, i, 1, d3.time.month);
             else if ((d["Periodicity"]==="Quarterly")) MultiplyEvents(data, d, i, 3, d3.time.month);
             else if ((d["Periodicity"]==="Yearly")) MultiplyEvents(data, d, i, 1, d3.time.year);
+            else MultiplyEvents(data, d, i, 1, d3.time.month); //default to "Monthly"
         };
     });
 
+
     function pulldates(data,field) {
-        return data.map(function(d){return new Date(d[field]);})
+        return data.map(function(d){
+            var date = new Date(d[field]);
+            if (d[field] && isNaN( date.getTime() ) ) alert("Invalid " + field +" "+d[field]+" in "+d[TaskLabel]+" / "+d.Type);
+            return new Date(d[field]);
+        })
     };
 
     var mins = [new Date(Math.min.apply(null,pulldates(data,"Date"))), new Date(Math.min.apply(null,pulldates(data,"EndDate")))];
