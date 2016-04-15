@@ -20,7 +20,7 @@
     BarPadding=.2;
 
     
-    width = 850;
+    //width = 400;
 </script>
 <script>//excellentexport.min.js
 var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;break a}p=void 0} window.btoa||(window.btoa=function(b){for(var g,c,f,h,e,a,d=0,r=b.length,s=Math.max,l="";d<r;){g=b.charCodeAt(d++)||0;c=b.charCodeAt(d++)||0;a=b.charCodeAt(d++)||0;if(255<s(g,c,a))throw p;f=g>>2&63;g=(g&3)<<4|c>>4&15;h=(c&15)<<2|a>>6&3;e=a&63;c?a||(e=64):h=e=64;l+="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(f)+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(g)+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(h)+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(e)}return l}); window.atob||(window.atob=function(b){b=b.replace(/=+$/,"");var g,c,f,h,e=0,a=b.length,d=[];if(1===a%4)throw p;for(;e<a;)g="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(b.charAt(e++)),c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(b.charAt(e++)),f="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(b.charAt(e++)),h="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(b.charAt(e++)),g=(g&63)<< 2|c>>4&3,c=(c&15)<<4|f>>2&15,f=(f&3)<<6|h&63,d.push(n(g)),c&&d.push(n(c)),f&&d.push(n(f));return d.join("")}); ExcellentExport=function(){function b(e,a){return e.replace(RegExp("{(\\w+)}","g"),function(d,e){return a[e]})}var g={excel:"data:application/vnd.ms-excel;base64,",csv:"data:application/csv;base64,"},c={excel:'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\x3c!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--\x3e</head><body><table>{table}</table></body></html>'},f= ",",h="\r\n";return{excel:function(e,a,d){a=a.nodeType?a:document.getElementById(a);var f=g.excel;a=b(c.excel,{a:d||"Worksheet",table:a.innerHTML});a=window.btoa(window.unescape(encodeURIComponent(a)));e.href=f+a;return!0},csv:function(e,a,d,b){void 0!==d&&d&&(f=d);void 0!==b&&b&&(h=b);a=a.nodeType?a:document.getElementById(a);var c="",l,k;for(d=0;d<a.rows.length;d++){l=a.rows[d];for(b=0;b<l.cells.length;b++){k=l.cells[b];var c=c+(b?f:""),m=k.textContent.trim();k=m;var t=-1!==m.indexOf(f)||-1!==m.indexOf("\r")|| -1!==m.indexOf("\n");(m=-1!==m.indexOf('"'))&&(k=k.replace(/"/g,'""'));if(t||m)k='"'+k+'"';c+=k}c+=h}a=g.csv+window.btoa(window.unescape(encodeURIComponent(c)));e.href=a;return!0}}}();</script>
@@ -37,6 +37,9 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
     body {
         font-family: Arial;
     }
+    p {
+        line-height: 1.5;
+    }
 </style>
 
     <div id="cont">
@@ -48,9 +51,9 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
             <ul>
                 <li>The column order is as follows:
                         <p>
-                        1) Task names. Has to be the first column. The column name is changeable and will be printed on the chart.<br>
-                        2) "Ongoing work" column, i.e. the one represented as bars. Has to be the second column. Has to have date periods inside (that is, dates separated by hyphen, like "02/06/16-08/06/16"). The column name  is changeable and will be on printed in the chart legend.<br>
-                        3,4,...) Events columns. Have to have dates inside. If date period rather than a date is set, then "Periodicity" has to be set to something too.<br>
+                        1) Task names. <b>Has to be the first column</b>. The names <b>have to be unique</b> (Coinciding names will be put on the same row of the chart. You can add spaces in front to make names unique if you need two different rows with the same apparent task name). The column name is changeable and will be printed on the chart.<br>
+                        2) "Ongoing work" column, i.e. the one represented as bars. <b>Has to be the second column</b>. Has to have <b>date periods</b> inside (that is, dates separated by hyphen, like "02/06/16-08/06/16"). The column name  is changeable and will be on printed in the chart legend.<br>
+                        3,4,...) Events columns. <b>Have to have dates inside</b>. If date period rather than a date is set, then "Periodicity" has to be set to something too, otherwise it will default to "Monthly".<br>
                         Last) The last three columns are "Periodicity", "Group" and "Footnote", in any order, but the names have to be these.
                         </p>
                 <li>For periods, the dates have to be separated by the hyphen "-"</li>
@@ -68,6 +71,7 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
             <li>Check the Gannt Chart below</li>
             <li>Click the link "Save the Gannt chart as SVG". SVG can be opened by Adobe Illustrator, "Printed to PDF" from Google Chrome or converted to PDF by multiple programs and online/cloud services</li>
             <li>If you need a larger or smaller chart change the "Scaling" field and hit "Upload" again
+            <li>If you need to change the width of the chart part (the white grid, excluding the labels on the leftt) change the "Width" field and hit "Upload" again
         </ol>
     </div>
     <a download="GanntTemplate.csv" href="#" onclick="return ExcellentExport.csv(this, 'example');">Download this template table as CSV</a> (You can then open it in Excel and plug your data)<br>
@@ -78,7 +82,7 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
 
     <h3>Upload your CSV or XLSX:</h3>
     <input type=file id=files />
-    <button id=upload>Upload</button> Scaling: <input type="text" id="scalefactor" value="1" size="1"><br><br><br><br>
+    <button id=upload>Upload</button> Scaling: <input type="text" id="scalefactor" value="1" size="1"> Width: <input type="text" id="width" value="850" size="1"><br><br><br><br>
    <!--  <a id="savelink">Save the Gannt chart below as SVG</a>; <a id="savelinkPNG"> PNG</a>; <a id="savelinkJPG"> JPG</a> -->
     Save the Gannt chart below as <button  onclick="saveChart('svg');">SVG</button><button  onclick="saveChart('png');">PNG</button><button  onclick="saveChart('jpg');">JPG</button>
     <br/><br/>
@@ -189,8 +193,6 @@ function PrintTable(example) {
         // };
 };
 
-//console.log(obj)
-function editcell(d,j)  {console.log(d,j)};
 
 function to_csv(workbook) {
     var result = [];
@@ -281,7 +283,10 @@ function PlotGanntChart(data) {
    
 
     function MultiplyEvents(arr, d, i, num, per) {
-        [sd,ed] = SplitDatePeriod(d);
+        var sded = SplitDatePeriod(d),
+            sd = sded[0],
+            ed = sded[1];
+        //[sd,ed] = SplitDatePeriod(d);
         arr[i].Date = sd;
         var cd = per.offset(sd,num);     
         for (var im=num; cd<ed; im += num) {
@@ -294,7 +299,10 @@ function PlotGanntChart(data) {
 
     data.forEach(function(d,i) {
         if (d.Type === Ongoing) {
-            [d.Date,d.EndDate] = SplitDatePeriod(d);
+            var sded = SplitDatePeriod(d);
+            d.Date = sded[0];
+            d.EndDate = sded[1];
+            //[d.Date,d.EndDate] = SplitDatePeriod(d);
         } else {
             if ((d["Periodicity"]==="Biweekly")) MultiplyEvents(data, d, i, 14, d3.time.day);
             else if ((d["Periodicity"]==="Monthly")) MultiplyEvents(data, d, i, 1, d3.time.month);
@@ -320,6 +328,8 @@ function PlotGanntChart(data) {
     var max = new Date(Math.max.apply(null,maxs.filter(function(d){return !isNaN(d.getTime())})));
 
     var eventsdomain = data.map(function(d) {return d.Type;}).filter(function(value, index, self){ return ((self.indexOf(value) === index) && (value !== Ongoing))});
+
+    var width = +document.getElementById('width').value;
 
     var xScale = d3.time.scale().domain([d3.time.month.floor(min),d3.time.month.ceil(max)]).range([0,width]);
 
