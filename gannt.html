@@ -59,11 +59,13 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
                 <li>For periods, the dates have to be separated by the hyphen "-"</li>
                 <li>If you need to several events at specific dates or several periods, they have to be separated by comma ","</li>
                 <li> 3rd and on columns are for different type of events, if you need more than one. The example below has two types of events (Delivarable and Milestone). If you need more, just add a column for them. If you only need one, remove one of the columns. You can change the names of event columns. They will be printed in the legend.</li>
-                <li>"Periodicity" column is for automatic multiplication of periodic events. Events will be created at indicated interval ("Biweekly", "Monthly", "Bi-Monthly", "Quarterly" or "Yearly") within the period indicated in the event column. 
-                <li>If you put a date period (that is, dates separated by hyphen, like "02/06/16-08/06/16") rather than just one date or a number dates separated by come, then you also HAVE TO set the Periodicity column to something. (Otherwise it will default to "Monthly")
-                <li>If you use "Periodicity", you should only indicate a period within which to multiply the events. For instance, if you only have a year long and set 4 dates for quarterly events manually, there is no need to also put "Quarterly" in the "Periodicity" column. The name has to be "Periodicity".</li>
+                <li>"Periodicity" column is for automatic multiplication of periodic events. Events will be created at indicated interval ("Biweekly", "Monthly", "Bimonthly", "Quarterly" or "Yearly") within the period indicated in the event column. 
+                <li>If you put a date period (that is, dates separated by hyphen, like "02/06/16-08/06/16") rather than just one date or a number dates separated by come, then you also <b>HAVE TO</b> set the Periodicity column to something. (Otherwise it will default to "Monthly")
+                <li>If you use "Periodicity", you should only indicate a period within which to multiply the events. <b>For instance, if you only have a year long and set 4 dates for quarterly events manually, there is no need to also put "Quarterly" in the "Periodicity" column</b>.</li>
                 <li>"Group" column is for when you want to split the chart into groups of tasks / sections. If Group column value is not empty, the line will be treated as a group caption. It may have dates assigned to it in the Ongoing column too. (e.g. it can stretch from first task to the last task within that group)</li>
-                <li>"Footnote" column contains all the footnotes. They are not actually connected to the lines. All the footnotes in this column will be printed below the task labels in the chart</li>
+                <li>"Footnote" column contains all the footnotes. They are not actually connected to the to table rows in any way. All the footnotes in this column will be printed below the task labels in the chart. So if you want a footnote to refer to a particular row, add a key (like asterisk) to the footnote and the row title manually</li>
+                <li>The names of columns "Periodicity", "Group" and "Footnote" <b>have to be exactly that</b>. (E.g. not "Footnotes") Otherwise the app will look for dates in them and find none.
+
 
             </ul>
             <li>Save As CSV (Comma separated value, this is essentially a text file with fields values separeted by comma) or XLSX</li>
@@ -82,7 +84,12 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
 
     <h3>Upload your CSV or XLSX:</h3>
     <input type=file id=files />
-    <button id=upload>Upload</button> Scaling: <input type="text" id="scalefactor" value="1" size="1"> Width: <input type="text" id="width" value="850" size="1"><br><br><br><br>
+    <button id=upload>Upload</button>
+     Scaling: <input type="text" id="scalefactor" value="1" size="1"> 
+     Width: <input type="text" id="width" value="850" size="1">
+     Captions every: <input type="text" id="monthcaptrate" value="1" size="1"> months //
+     Grid every: <input type="text" id="monthgridrate" value="1" size="1"> months
+     <br><br><br><br>
    <!--  <a id="savelink">Save the Gannt chart below as SVG</a>; <a id="savelinkPNG"> PNG</a>; <a id="savelinkJPG"> JPG</a> -->
     Save the Gannt chart below as <button  onclick="saveChart('svg');">SVG</button><button  onclick="saveChart('png');">PNG</button><button  onclick="saveChart('jpg');">JPG</button>
     <br/><br/>
@@ -105,7 +112,7 @@ var n=String.fromCharCode,p;a:{try{document.createElement("$")}catch(q){p=q;brea
 
             .grouprect { /*Bars for Task sections*/
                 fill: rgb(0,0,117);
-                opacity: 0.6
+                opacity: 0.0
             }
 
             .grouprectspacer { /*Bars for covering the grid on task section lines*/
@@ -170,7 +177,7 @@ melt=function(n){"use strict";function r(n){for(var r={},n=n||[],t=0;t<n.length;
 
 <script>
 
-var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"","Milestone":"10/10/16","Periodicity":"","Group":"","Footnote":""},{"TASK":"Scope of Work Finalization With CEO ","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"5/20/17,7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change"},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"12/30/16","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Implementation ","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"3/31/17","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Analysis ","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"5/30/17","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/31/2016-3/30/2018","Milestone":"","Periodicity":"Bi-Monthly","Group":"","Footnote":""},{"TASK":"Open Door Policy ","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":""}];
+var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"","Milestone":"10/10/16","Periodicity":"","Group":"","Footnote":""},{"TASK":"Scope of Work Finalization With CEO ","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"5/20/17,7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change"},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"12/30/16","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Implementation ","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"3/31/17","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Analysis ","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"5/30/17","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/31/2016-3/30/2018","Milestone":"","Periodicity":"Bimonthly","Group":"","Footnote":""},{"TASK":"Open Door Policy ","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":""}];
 
 function PrintTable(example) {
     d3.select("#example").html("");
@@ -307,7 +314,7 @@ function PlotGanntChart(data) {
         } else {
             if ((d["Periodicity"]==="Biweekly")) MultiplyEvents(data, d, i, 14, d3.time.day);
             else if ((d["Periodicity"]==="Monthly")) MultiplyEvents(data, d, i, 1, d3.time.month);
-            else if ((d["Periodicity"]==="Bi-Monthly")) MultiplyEvents(data, d, i, 2, d3.time.month);
+            else if ((d["Periodicity"]==="Bimonthly")) MultiplyEvents(data, d, i, 2, d3.time.month);
             else if ((d["Periodicity"]==="Quarterly")) MultiplyEvents(data, d, i, 3, d3.time.month);
             else if ((d["Periodicity"]==="Yearly")) MultiplyEvents(data, d, i, 1, d3.time.year);
             else MultiplyEvents(data, d, i, 1, d3.time.month); //default to "Monthly"
@@ -325,13 +332,22 @@ function PlotGanntChart(data) {
 
     var eventsdomain = keys.slice(2,keys.length-3);
 
-    var mins = [new Date(Math.min.apply(null,pulldates(data,"Date"))), new Date(Math.min.apply(null,pulldates(data,"EndDate")))];
-    var maxs = [new Date(Math.max.apply(null,pulldates(data,"Date"))), new Date(Math.max.apply(null,pulldates(data,"EndDate")))];
+   function getminmaxdate(data) {
+        var mins = [new Date(Math.min.apply(null,pulldates(data,"Date"))), new Date(Math.min.apply(null,pulldates(data,"EndDate")))];
+        var maxs = [new Date(Math.max.apply(null,pulldates(data,"Date"))), new Date(Math.max.apply(null,pulldates(data,"EndDate")))];
 
-    var min = new Date(Math.min.apply(null,mins.filter(function(d){return !isNaN(d.getTime())})));
-    var max = new Date(Math.max.apply(null,maxs.filter(function(d){return !isNaN(d.getTime())})));
+        var min = new Date(Math.min.apply(null,mins.filter(function(d){return !isNaN(d.getTime())})));
+        var max = new Date(Math.max.apply(null,maxs.filter(function(d){return !isNaN(d.getTime())})));
+        return [min,max];
+    }
+
+    var minmaxdates = getminmaxdate(data);
+    var min = minmaxdates[0];
+    var max = minmaxdates[1];
 
     var width = +document.getElementById('width').value;
+    var monthcaptrate = +document.getElementById('monthcaptrate').value;
+    var monthgridrate = +document.getElementById('monthgridrate').value;
 
     var xScale = d3.time.scale().domain([d3.time.month.floor(min),d3.time.month.ceil(max)]).range([0,width]);
 
@@ -354,13 +370,19 @@ function PlotGanntChart(data) {
 
     var bg = svg.append("rect").attr("fill", BGColor);
     var chartarea=svg.append("g");
+
+     //Footnotes
+    var footnotebox = chartarea.append("g")
+    footnotes = d3.merge(footnotes.map(function(d) {return d.split('\n').join('\n\u00A0\u00A0').split('\n');}));
+    footnotebox.selectAll("text").data(footnotes).enter().append("text").attr("y",function(d,i) {return i+1.5+"em"}).text(function(d) {return d;});
+    footnotebox.attr("transform","translate(-"+footnotebox[0][0].getBBox().width+","+bottomline+")");
     
     //Chart background
     chartarea.append("rect").attr("x",0).attr("y",topline).attr("class","chartbg").attr("width",width).attr("height",height);
 
     //Make Axes (months, years and tasks captions)
 
-    var MakexAxisM = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%b')).tickValues(d3.time.month.range(xScale.domain()[0],xScale.domain()[1]));
+    var MakexAxisM = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%b')).tickValues(d3.time.month.range(xScale.domain()[0],xScale.domain()[1],monthcaptrate));
     var MakexAxisY = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).ticks(d3.time.year, 1);
     var MakexAxisYst = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).tickValues([xScale.domain()[0]]);
     var MakeyAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-width);
@@ -406,7 +428,9 @@ function PlotGanntChart(data) {
         });
     };
 
-    var labelareawidth = Math.ceil(d3.max(yax.selectAll("text")[0].map(function(d) {return d.getComputedTextLength()})))+10;
+    var labelareawidth = Math.ceil(d3.max(yax.selectAll("text")[0].map(function(d) {return d.getComputedTextLength()})));
+
+    labelareawidth = Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+10;
 
     //TASK caption
     var taskcaption = chartarea.append("text").text(TaskLabel).attr("y",yScale.rangeBand()-BarHeight*(1+BarPadding)).style("font-weight","bold");
@@ -428,7 +452,7 @@ function PlotGanntChart(data) {
         .attr("x1",-labelareawidth).attr("x2",width).attr("y1",topline).attr("y2",topline);
 
     grid.selectAll("line .vgrid")
-        .data(xScale.ticks(d3.time.months, 1))
+        .data(xScale.ticks(d3.time.months, monthgridrate))
         .enter()
         .append("line")
         .attr("class", "vgrid")
@@ -448,7 +472,13 @@ function PlotGanntChart(data) {
 
     //Plot bars for ongoing work
 
-    var dprintformat = d3.time.format("%b %e, %Y");
+    var dprintformat = function(date) {
+        var s="%b";
+        if (d3.time.format("%b")(date)!==d3.time.format("%B")(date)) s=s+".";
+        s=s+" %e, %Y";
+        return d3.time.format(s)(date);
+        //return (d3.time.format("%b")(date)===d3.time.format("%b")(date)===)d3.time.format("%b. %e, %Y")(date);
+    };
 
     chartarea.selectAll("rect .ongoing").data(data.filter(function(d){return (d.Type===Ongoing)})).enter()
         .append("rect")
@@ -469,6 +499,21 @@ function PlotGanntChart(data) {
         .attr("fill", function (d) { return cScale(d.Type);})
         .append("title").text(function(d) {return d.Type+": "+dprintformat(new Date(d.Date));});
 
+    //Add dates on the right
+     chartarea.selectAll("text.datetext")
+        .data( taskdomain.map(function(task){
+            var mmd = getminmaxdate(data.filter(function(d){return d[TaskLabel]===task;}));
+            return {"task":task, "dates":dprintformat(mmd[0])+' - '+dprintformat(mmd[1])};
+        })).enter()
+        .append("text")
+        .attr("class","datetext")
+        // .attr("width",100)
+        // .attr("height",4)
+        .attr("y",function(d) {return yScale(d.task)+BarHeight*.66})
+        .attr("x",width+3)
+        .text(function(d) {return d.dates})
+    var datecolwidth = d3.max(chartarea.selectAll("text.datetext")[0].map(function(d){return d.getBBox().width;}));
+
     //Make legend
     var legendbox=chartarea.append("g");
 
@@ -488,18 +533,15 @@ function PlotGanntChart(data) {
     };
     legendbox.attr("transform","translate("+(width-legendbox[0][0].getBBox().width)/2.+","+(bottomline+BarHeight*(1+BarPadding))+")");
 
-    //Footnotes
-    var footnotebox = chartarea.append("g")
-    footnotebox.selectAll("text").data(footnotes).enter().append("text").attr("y",function(d,i) {return i+1.5+"em"}).text(function(d) {return d;});
-    footnotebox.attr("transform","translate(-"+footnotebox[0][0].getBBox().width+","+bottomline+")");
+   
 
     //Finish up and form a link for SVG download
     var scalingfactor=document.getElementById('scalefactor').value;
     margin.bottom += Math.max(legendbox[0][0].getBBox().height,footnotebox[0][0].getBBox().height);
     margin.top+=scalingfactor*BarHeight*(1.5+BarPadding);
     chartarea.attr("transform","translate("+(scalingfactor*labelareawidth+margin.left)+","+margin.top+")scale("+scalingfactor+")");
-    svg.attr("width",scalingfactor*(width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
-    bg.attr("width",scalingfactor*(width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
+    svg.attr("width",scalingfactor*(datecolwidth+width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
+    bg.attr("width",scalingfactor*(datecolwidth+width+Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+margin.left+margin.right)).attr("height",scalingfactor*(height+margin.top+margin.bottom));
     //svg.style("background-color",BGColor);
 };
 
