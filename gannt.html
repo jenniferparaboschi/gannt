@@ -408,9 +408,10 @@ function PlotGanntChart(data) {
         });
     };
 
-    var labelareawidth = Math.ceil(d3.max(yax.selectAll("text")[0].map(function(d) {return d.getComputedTextLength()})));
+    var labelareawidth = Math.ceil(d3.max(yax.selectAll("tspan")[0].map(function(d) {return d.getComputedTextLength()})));
 
     labelareawidth = Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+10;
+
 
     //TASK caption
     var taskcaption = chartarea.append("text").text(TaskLabel).attr("y",yScale.rangeBand()-BarHeight*(1+BarPadding)).style("font-weight","bold");
