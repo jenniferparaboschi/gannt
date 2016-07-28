@@ -295,6 +295,7 @@ function PlotGanntChart(data) {
             //[d.Date,d.EndDate] = SplitDatePeriod(d);
         } else {
             if ((d["Periodicity"]==="Biweekly")) MultiplyEvents(data, d, i, 14, d3.time.day);
+            if ((d["Periodicity"]==="Weekly")) MultiplyEvents(data, d, i, 7, d3.time.day);
             else if ((d["Periodicity"]==="Monthly")) MultiplyEvents(data, d, i, 1, d3.time.month);
             else if ((d["Periodicity"]==="Bimonthly")) MultiplyEvents(data, d, i, 2, d3.time.month);
             else if ((d["Periodicity"]==="Quarterly")) MultiplyEvents(data, d, i, 3, d3.time.month);
