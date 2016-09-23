@@ -323,6 +323,8 @@ function PlotGanntChart(data) {
     var min = minmaxdates[0];
     var max = minmaxdates[1];
 
+    if ((max-min)*3.17e-11>5) alert("The timespan of the chart is more than 5 years! Check for typos");
+
     var width = +document.getElementById('width').value;
     var monthcaptrate = +document.getElementById('monthcaptrate').value;
     var monthgridrate = +document.getElementById('monthgridrate').value;
