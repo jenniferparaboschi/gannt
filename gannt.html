@@ -44,8 +44,11 @@
     <div id="cont">
         <h1>Gannt Chart Generator Tool</h1>
         This tool is supposed to be very simple to use and does not require anything but a web browser (tested in Google Chrome, will NOT work in IE).
-        The template table below is an example of how data should be organized to produce the output at the bottom of the page
-        <ol>
+        The template table below is an example of how data should be organized to produce the output at the bottom of the page<br><br>
+
+        <button onclick="shinst();">Show/Hide Instructions</button><br><br>
+
+        <ol id="instructions" style="display:none">
             <li>Prepare the data in Excel (or anything else that can save CSV or XLSX) according to the template table below:</li>
             <ul>
                 <li>The column order is as follows:
@@ -86,6 +89,7 @@
     <button id=upload>Upload</button>
      Scaling: <input type="text" id="scalefactor" value="1" size="1"> 
      Width: <input type="text" id="width" value="850" size="1">
+     BarHeight: <input type="text" id="barheight" value="40" size="1">
      Captions every: <input type="text" id="monthcaptrate" value="1" size="1"> months //
      Grid every: <input type="text" id="monthgridrate" value="1" size="1"> months
      <br><br>
@@ -159,27 +163,30 @@
 
 <script>
 
-var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"","Milestone":"10/10/16","Periodicity":"","Group":"","Footnote":""},{"TASK":"Scope of Work Finalization With CEO ","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"5/20/17,7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change"},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"12/30/16","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Implementation ","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"3/31/17","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Survey Analysis ","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"5/30/17","Periodicity":"","Group":"","Footnote":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/31/2016-3/30/2018","Milestone":"","Periodicity":"Bimonthly","Group":"","Footnote":""},{"TASK":"Open Door Policy ","Ongoing Contractor Work":"10/17/2016-4/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":""}];
+var example=[{"TASK":"Contract Award","Ongoing Contractor Work":"","Deliverable":"","Milestone":"10/10/2016","Periodicity":"","Group":"","Footnote":"","Color":"green","Image":"file:///K:/GanntChartTool/handshake.jpg"},{"TASK":"Scope of Work Finalization With CEO","Ongoing Contractor Work":"10/1/2016-10/21/16","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"green","Image":""},{"TASK":"Group of Tasks 1","Ongoing Contractor Work":"10/1/16-8/15/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":"","Color":"","Image":""},{"TASK":"Task 1","Ongoing Contractor Work":"10/1/2016-11/30/2016","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"red","Image":""},{"TASK":"Secondary Data Collection","Ongoing Contractor Work":"10/1/2016-3/31/2017","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Task 2","Ongoing Contractor Work":"","Deliverable":"10/28/2016,5/16/2017","Milestone":"5/20/17,7/17/2017","Periodicity":"","Group":"","Footnote":"* Subject to change","Color":"","Image":""},{"TASK":"Task2 Analysis","Ongoing Contractor Work":"10/28/16-11/28/16,5/16/17-6/30/17","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Survey Development","Ongoing Contractor Work":"11/7/2016-12/30/2016","Deliverable":"12/30/2016","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Survey Implementation","Ongoing Contractor Work":"1/9/2017-3/31/2017","Deliverable":"3/31/2017","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"rgb(100,0,20)","Image":""},{"TASK":"Survey Analysis","Ongoing Contractor Work":"3/1/2017-5/30/2017","Deliverable":"","Milestone":"5/30/2017","Periodicity":"","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Group of Tasks 2","Ongoing Contractor Work":"","Deliverable":"","Milestone":"","Periodicity":"","Group":"1","Footnote":"","Color":"","Image":""},{"TASK":"Webinars","Ongoing Contractor Work":"","Deliverable":"11/8/2016, 2/8/17, 7/5/17, 11/8/17, 3/20/18","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"","Image":"webinar.jpg"},{"TASK":"Outreach to Community Leaders, Organizations, and Members","Ongoing Contractor Work":"10/17/2016-3/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Core Team Meetings","Ongoing Contractor Work":"","Deliverable":"10/17/2016-3/30/2018","Milestone":"","Periodicity":"Biweekly","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Newsletters","Ongoing Contractor Work":"","Deliverable":"10/31/2016-3/30/2018","Milestone":"","Periodicity":"Bimonthly","Group":"","Footnote":"","Color":"","Image":""},{"TASK":"Open Door Policy","Ongoing Contractor Work":"10/17/2016-4/30/2018","Deliverable":"","Milestone":"","Periodicity":"","Group":"","Footnote":"","Color":"#ccffcc","Image":""},{"TASK":"Quarterly Meetings","Ongoing Contractor Work":"","Deliverable":"10/15/2016-3/30/2018","Milestone":"","Periodicity":"Quarterly","Group":"","Footnote":"","Color":"","Image":""}];
 
 function PrintTable(example) {
     d3.select("#example").html("");
     var row=d3.select("#example").append("tr");//.selectAll("th").data(d3.keys(example[0])).enter().append("th").text(function(d) {return d});
-        for (var j in example[0])
-            row.append("th").text(j);
-    example.forEach(function(d) {
-        var row=d3.select("#example").append("tr");
-        for (var j in d)
-             row.append("td").text(d[j]);
-    });
-    // for (var i=0; i<example.length; i++) {
+    
+    for (var j in example[0])
+        row.append("th").text(j);
+    
+    // example.forEach(function(d) {
     //     var row=d3.select("#example").append("tr");
-    //     for (var j in example[i])
-    //          row.append("td").data([{"row":i,"col":j,"data":example}]).text(example[i][j]).attr("contenteditable",true)
-    //             .on('mouseout',function(d) {
-    //                 d.data[d.row][d.col]=this.innerText;
-    //                 PlotGanntChart(d.data);
-    //             });
-    // };
+    //     for (var j in d)
+    //          row.append("td").text(d[j]);
+    // });
+    for (var i=0; i<example.length; i++) {
+        var row=d3.select("#example").append("tr");
+        for (var j in example[i])
+             row.append("td").data([{"row":i,"col":j,"data":example}]).text(example[i][j]).attr("contenteditable",true)
+                .on('mouseout',function(d) {
+                    d.data[d.row][d.col]=this.innerText;
+                    PlotGanntChart(d.data);
+                });
+    };
+    //d3.select("body").selectAll("img").data(example).enter().append("img").attr("src",function(d) {return d.Image})
 };
 
 
@@ -248,10 +255,12 @@ function PlotGanntChart(data) {
     var footnotes = data.filter(function(d) {return d.Footnote;}).map(function(d) {return d.Footnote;});
     
     var tasklines = taskdomain.map(function(d) {return d.split('\n').length});
-    var BarHeight = BarHeight0*d3.max(tasklines);
+    var BarHeight = +document.getElementById('barheight').value*d3.max(tasklines);
 
-    data = melt(data,[TaskLabel,"Group","Periodicity","Footnote"],"Type","Date",true).filter(function(d) {return d.Date.length>0;})
+    var columns2notmelt=[TaskLabel,"Group","Periodicity","Footnote","Color","Image"];
 
+    data = melt(data,columns2notmelt,"Type","Date",true).filter(function(d) {return d.Date.length>0;})
+    debugger;
     var data1=[]; data.forEach(function(d) {
             d.Date.split(",").forEach(function(d1){
                 var rec=JSON.parse(JSON.stringify(d));
@@ -312,8 +321,8 @@ function PlotGanntChart(data) {
             return new Date(d[field]);
         })
     };
-
-    var eventsdomain = keys.slice(2,keys.length-3);
+    var optionalcolpresent = columns2notmelt.slice(1).map(function(d) {return keys.indexOf(d)>-1}).reduce(function(a,b){ return a+b},0);
+    var eventsdomain = keys.slice(2,keys.length-optionalcolpresent);
 
     function getminmaxdate(data) {
         return d3.extent(d3.merge([pulldates(data,"Date"),pulldates(data,"EndDate")]).filter(function(d){return !isNaN(d.getTime())}));
@@ -347,6 +356,7 @@ function PlotGanntChart(data) {
     var svg=d3.select("#chart");
 
     svg.selectAll("g").remove();
+    svg.selectAll("rect").remove();
 
     var bg = svg.append("rect").attr("fill", BGColor);
     var chartarea=svg.append("g");
@@ -474,6 +484,7 @@ function PlotGanntChart(data) {
     chartarea.selectAll("rect .ongoing").data(data.filter(function(d){return (d.Type===Ongoing)})).enter()
         .append("rect")
         .attr("class",function(d){return (d.Group==="")?"ongoing":"grouprect";})
+        .style("fill", function(d) {return d.Color;})
         .attr("x",function(d) {return xScale(new Date(d["Date"]))})
         .attr("width",function(d) {return xScale(new Date(d["EndDate"]))-xScale(new Date(d["Date"]))})
         .attr("y",function(d){return yScale(d[TaskLabel]);})
@@ -483,12 +494,24 @@ function PlotGanntChart(data) {
     //Plot symbols for events
 
     chartarea.selectAll("path .symbols")
-        .data(data.filter(function(d){return d.Type!==Ongoing}))
+        .data(data.filter(function(d){return (d.Type!==Ongoing) && ((d.Image==="") || d.Image===undefined)}))
         .enter().append("path").attr("class", "symbols")
         .attr("transform", function(d) { return "translate(" + xScale(new Date(d.Date)) + "," + (yScale(d[TaskLabel])+yScale.rangeBand()*.5) + ")"; })
         .attr("d", d3.svg.symbol().type(function(d) {return sScale(d.Type)}).size(BarHeight*5))
         .attr("fill", function (d) { return cScale(d.Type);})
         .append("title").text(function(d) {return d.Type+": "+dprintformat(new Date(d.Date));});
+
+    //Plot images for events
+    chartarea.selectAll("image")
+        .data(data.filter(function(d){return ((d.Image!==undefined) && (d.Image!==""))}))
+        .enter().append("svg:image")
+        .attr("x", function(d) {return xScale(new Date(d.Date)); })
+        .attr("y", function(d) {return yScale(d[TaskLabel])})
+        .attr("width",BarHeight*(1+BarPadding))
+        .attr("height",BarHeight*(1+BarPadding))
+        .attr("xlink:href", function(d) {
+            return d.Image;
+        })
 
     //Add dates on the right
     var datecolwidth = 0;
@@ -581,6 +604,31 @@ function saveChart(type) {
                 CreateAAndClick("jpg",canvas.toDataURL('image/jpeg'),0.98);
         };
     };
+};
+
+function getDataUri(url, callback) {
+    var image = new Image();
+
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+        canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+
+        canvas.getContext('2d').drawImage(this, 0, 0);
+
+        // Get raw image data
+        callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+
+        // ... or get as Data URI
+        callback(canvas.toDataURL('image/png'));
+    };
+
+    image.src = url;
+}
+
+function shinst() {
+    curvis = d3.select("#instructions").style("display");
+    d3.select("#instructions").style("display", curvis=="none"?"inline":"none");
 };
 
 PlotGanntChart(example);
