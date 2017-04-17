@@ -56,7 +56,7 @@
                         1) Task names. <b>Has to be the first column</b>. The names <b>have to be unique</b> (Coinciding names will be put on the same row of the chart. You can add spaces in front to make names unique if you need two different rows with the same apparent task name). The column name is changeable and will be printed on the chart.<br>
                         2) "Ongoing work" column, i.e. the one represented as bars. <b>Has to be the second column</b>. Has to have <b>date periods</b> inside (that is, dates separated by hyphen, like "02/06/16-08/06/16"). The column name  is changeable and will be on printed in the chart legend.<br>
                         3,4,...) Events columns. <b>Have to have dates inside</b>. If date period rather than a date is set, then "Periodicity" has to be set to something too, otherwise it will default to "Monthly".<br>
-                        Last) The last three columns are "Periodicity", "Group" and "Footnote", in any order, but the names have to be these.
+                        Last) The last three columns are "Periodicity", "Group", "Footnote", "Color", "Color Legend" and "Image" in any order, but the names have to be these.
                         </p>
                 <li>For periods, the dates have to be separated by the hyphen "-"</li>
                 <li>If you need to several events at specific dates or several periods, they have to be separated by comma ","</li>
@@ -66,7 +66,9 @@
                 <li>If you use "Periodicity", you should only indicate a period within which to multiply the events. <b>For instance, if you only have a year long and set 4 dates for quarterly events manually, there is no need to also put "Quarterly" in the "Periodicity" column</b>.</li>
                 <li>"Group" column is for when you want to split the chart into groups of tasks / sections. If Group column value is not empty, the line will be treated as a group caption. It may have dates assigned to it in the Ongoing column too. (e.g. it can stretch from first task to the last task within that group)</li>
                 <li>"Footnote" column contains all the footnotes. They are not actually connected to the to table rows in any way. All the footnotes in this column will be printed below the task labels in the chart. So if you want a footnote to refer to a particular row, add a key (like asterisk) to the footnote and the row title manually</li>
-                <li>The names of columns "Periodicity", "Group" and "Footnote" <b>have to be exactly that</b>. (E.g. not "Footnotes") Otherwise the app will look for dates in them and find none.
+                <li>"Color" is for the case if you want the long bar for "Ongoing work" to be of a different color on that line
+                <li>"Color legend" is if you want to have a legend for colors of different bars. The first instance of the text for each color will be displayed
+                <li>The names of columns "Periodicity", "Group", "Footnote","Color", "Color Legend" and "Image"<b>have to be exactly that</b>. (E.g. not "Footnotes") Otherwise the app will look for dates in them and find none.
 
 
             </ul>
@@ -89,14 +91,17 @@
     <button id=upload>Upload</button>
      Scaling: <input type="text" id="scalefactor" value="1" size="1"> 
      Width: <input type="text" id="width" value="850" size="1">
-     BarHeight: <input type="text" id="barheight" value="40" size="1">
+     BarHeight: <input type="text" id="barheight" value="20" size="1">
      Captions every: <input type="text" id="monthcaptrate" value="1" size="1"> months //
      Grid every: <input type="text" id="monthgridrate" value="1" size="1"> months
      <br><br>
      <input type="checkbox" id="datesright"> Dates on the right
      <br><br>
-     Regex pattern for the task number: <input type="text" id="numrestring" value="^Task [0-9]{1}: " value1="^[\d]{1,2}\.[\d]{0,2}\s"> //
+     Regex pattern for the task number: <input type="text" size=80 id="numrestring" value1="(^Task [\w]{1}\s{0,1}\.*[\w]*:* )|(^[\w]{1,2}\.[\d]{0,2})" value2="^Task [\w]{1}\s{0,1}\.*[\w]*:* " value="^[\w]{1,2}\.[\d]{0,2}\s"> //
      Font-size: <button onclick="incfontsize(1)">+</button><button onclick="incfontsize(-1)">-</button>
+     <br><br>
+     Background color: <input type="text" id="BGColor" size="30">
+     <script type="text/javascript">document.getElementById('BGColor').value=BGColor</script>
      <br><br>
    <!--  <a id="savelink">Save the Gannt chart below as SVG</a>; <a id="savelinkPNG"> PNG</a>; <a id="savelinkJPG"> JPG</a> -->
     Save the Gannt chart below as <button  onclick="saveChart('svg');">SVG</button><button  onclick="saveChart('png');">PNG</button><button  onclick="saveChart('jpg');">JPG</button>
@@ -277,7 +282,7 @@ function PlotGanntChart(data) {
     var tasklines = taskdomain.map(function(d) {return d.split('\n').length});
     var BarHeight = +document.getElementById('barheight').value*d3.max(tasklines);
 
-    var columns2notmelt=[TaskLabel,"Group","Periodicity","Footnote","Color","Image","TaskNumber"];
+    var columns2notmelt=[TaskLabel,"Group","Periodicity","Footnote","Color","Color Legend","Image","TaskNumber"];
 
     data = melt(data,columns2notmelt,"Type","Date",true).filter(function(d) {return d.Date.length>0;})
 
@@ -379,7 +384,7 @@ function PlotGanntChart(data) {
     svg.selectAll("g").remove();
     svg.selectAll("rect").remove();
 
-    var bg = svg.append("rect").attr("fill", BGColor);
+    var bg = svg.append("rect").attr("fill", document.getElementById('BGColor').value);
     var chartarea=svg.append("g");
 
      //Footnotes
@@ -391,23 +396,34 @@ function PlotGanntChart(data) {
     //Chart background
     chartarea.append("rect").attr("x",0).attr("y",topline).attr("class","chartbg").attr("width",width).attr("height",height);
 
+    
     //Make Axes (months, years and tasks captions)
-
+    
+    //Monthly axis / month labels on top
     var MakexAxisM = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%b')).tickValues(d3.time.month.range(xScale.domain()[0],xScale.domain()[1],monthcaptrate));
-    var MakexAxisY = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).ticks(d3.time.year, 1);
-    var MakexAxisYst = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).tickValues([xScale.domain()[0]]);
-    var MakeyAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-width).tickFormat(TaskTitle);
-    var MakeyAxisSections = d3.svg.axis().scale(yScale).orient("left").tickSize(0).tickValues(tasksections).tickFormat(TaskTitle);
     var xaxm=chartarea.append("g").attr("class", "x axis")
             .attr("transform","translate("+(xScale(max)-xScale(d3.time.day.offset(max,-15)))+",0)").call(MakexAxisM);
+    
+    //Yearly axis / year labels on top
+    var MakexAxisY = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).ticks(d3.time.year, 1);
     var xaxy=chartarea.append("g").attr("class", "x axis")
             .attr("transform","translate(0,-"+BarHeight*(1+BarPadding)+")").call(MakexAxisY)
             .selectAll(".tick text").style("text-anchor", "start");
+    
+    //Year label at the beginning
+    var MakexAxisYst = d3.svg.axis().scale(xScale).orient("top").tickSize(0).tickFormat( d3.time.format('%Y')).tickValues([xScale.domain()[0]]);
     var xaxyst=chartarea.append("g").attr("class", "x axis")
             .attr("transform","translate(0,-"+BarHeight*(1+BarPadding)+")").call(MakexAxisYst)
             .selectAll(".tick text").style("text-anchor", "start");
+    
+    //Task titles on the left
+    var MakeyAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-width).tickFormat(TaskTitle);
     var yax=chartarea.append("g").attr("class", "y axis").call(MakeyAxis);
     yax.selectAll(".tick text").call(wrap,1);
+    
+    //For groups/sections, print once again to make them bolder
+    var MakeyAxisSections = d3.svg.axis().scale(yScale).orient("left").tickSize(0).tickValues(tasksections).tickFormat(TaskTitle);
+    chartarea.append("g").attr("class", "y axis").call(MakeyAxisSections).selectAll(".tick text").call(wrap,1);
 
     //Task numbers
     var MakeyAxisNum = d3.svg.axis().scale(yScale).orient("left").tickSize(-width).tickFormat(TaskNumber);
@@ -450,7 +466,6 @@ function PlotGanntChart(data) {
         +d3.max(yaxn.selectAll(".tick text")[0].map(function(d) {return d.getComputedTextLength()}))
         );
 
-    console.log(yaxn.selectAll(".tick text")[0].map(function(d) {return d.getComputedTextLength()}))
 
     labelareawidth = Math.max(labelareawidth,footnotebox[0][0].getBBox().width)+10;
     yaxn.selectAll(".tick text").attr("transform","translate(-"+labelareawidth+",0)").style("text-anchor", "start");
@@ -460,8 +475,6 @@ function PlotGanntChart(data) {
     taskcaption.attr("x", -(labelareawidth-taskcaption[0][0].getComputedTextLength())/2.);
 
     
-
-
     //Making grid lines
     var grid = chartarea.append("g")
     grid.selectAll("line .hgrid")
@@ -487,8 +500,7 @@ function PlotGanntChart(data) {
         .attr("y1",topline).attr("y2",bottomline);
 
 
-    //Bold captions and rectangles for group/Section task titles
-    chartarea.append("g").attr("class", "y axis").call(MakeyAxisSections).selectAll(".tick text").call(wrap,1);
+    //Rectangles for group/Section task titles
     chartarea.selectAll("rect .grouprectspacer").data(tasksections).enter()
             .append("rect").attr("class","grouprectspacer")
             .attr("x", xScale.range()[0]).attr("y",function(d){return yScale(d)-BarHeight*(BarPadding)*.5;})
@@ -558,11 +570,36 @@ function PlotGanntChart(data) {
     }
 
     //Make legend
+    var ColorLegendEntries = data.filter(function(d){return ((d["Color Legend"]!=="") && (d["Color Legend"]!==undefined))}),
+        ColorLegends = {};
+
+    ColorLegendEntries.forEach(function(d) {
+        if ((ColorLegends[d["Color"]]===undefined) && (d["Color Legend"])) ColorLegends[d["Color"]] = d["Color Legend"]
+    })
+
     var legendbox=chartarea.append("g");
 
-    legendbox.append("rect").attr("class","ongoing").attr("height",BarHeight).attr("width",BarHeight);
-    var ontext=legendbox.append("text").text(Ongoing);
-    ontext.attr("x",BarHeight*1.25).attr("y",(BarHeight+ontext[0][0].getBBox().height)*.5);
+    var ongrect = legendbox.append("rect").attr("class","ongoing").attr("height",BarHeight).attr("width",BarHeight);
+
+    if (ColorLegendEntries.length===0) {
+        var ontext=legendbox.append("text").text(Ongoing);
+        ontext.attr("x",BarHeight*1.25).attr("y",(BarHeight+ontext[0][0].getBBox().height)*.5);
+    } else {
+        ongrect.attr("width",1);
+        for (var icolleg=0 in ColorLegends) {
+            var x=legendbox[0][0].getBBox().width+BarHeight*.5;
+            console.log(x)
+            legendbox.append("rect").attr("height",BarHeight).attr("width",BarHeight)
+                .attr("fill",icolleg)
+                .attr("transform", function(d) { return "translate(" + x + "," + 0*BarHeight/2 + ")"; });
+            x=legendbox[0][0].getBBox().width+5;
+            var legtext=legendbox.append("text").attr("x",x).text(ColorLegends[icolleg]);
+            legtext.attr("y",(BarHeight+legtext[0][0].getBBox().height)*.5)
+        }
+    }       
+
+   
+
 
     for (var iev=0; iev<eventsdomain.length; iev++) {
         var x=legendbox[0][0].getBBox().width+BarHeight*.5;
@@ -574,9 +611,12 @@ function PlotGanntChart(data) {
         var legtext=legendbox.append("text").attr("x",x).text(eventsdomain[iev]);
         legtext.attr("y",(BarHeight+legtext[0][0].getBBox().height)*.5)
     };
+
+    if (ColorLegendEntries.length>0) ongrect.attr("width",0);
+
     legendbox.attr("transform","translate("+(width-legendbox[0][0].getBBox().width)/2.+","+(bottomline+BarHeight*(1+BarPadding))+")");
 
-   
+    
 
     //Finish up and form a link for SVG download
     var scalingfactor=document.getElementById('scalefactor').value;
