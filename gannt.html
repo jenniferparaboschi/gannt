@@ -588,7 +588,6 @@ function PlotGanntChart(data) {
         ongrect.attr("width",1);
         for (var icolleg=0 in ColorLegends) {
             var x=legendbox[0][0].getBBox().width+BarHeight*.5;
-            console.log(x)
             legendbox.append("rect").attr("height",BarHeight).attr("width",BarHeight)
                 .attr("fill",icolleg)
                 .attr("transform", function(d) { return "translate(" + x + "," + 0*BarHeight/2 + ")"; });
