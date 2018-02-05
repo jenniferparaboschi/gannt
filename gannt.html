@@ -90,7 +90,7 @@
     <table id="example"></table>
     
     <br><br>
-
+	<div id="errors" style="color:red"></div>
     <h3>Upload your CSV or XLSX:</h3>
     <input type=file id=files />
     <button id=upload>Upload</button>
@@ -300,10 +300,13 @@ function PlotGanntChart(data) {
         var taskevent=d[TaskLabel]+" / "+d.Type;
         var sded = d.Date.split("-"),
             sd = new Date(sded[0]);
-            if (sded[0] && isNaN( sd.getTime() ) ) alert("Invalid start date "+sded[0]+" in "+taskevent);
+            if (sded[0] && isNaN( sd.getTime() ) ) d3.select('#errors').append("p").text("Invalid start date "+sded[0]+" in "+taskevent)
+				//alert("Invalid start date "+sded[0]+" in "+taskevent);
             ed = new Date(sded[1]);
-            if (sded[1] && isNaN( ed.getTime() ) ) alert("Invalid end date "+sded[1]+" in "+taskevent);
-        if (sded.length>2) alert("Date period in "+taskevent+" is split into more than 2 dates: " +sded);
+            if (sded[1] && isNaN( ed.getTime() ) ) d3.select('#errors').append("p").text("Invalid end date "+sded[1]+" in "+taskevent)
+				//alert("Invalid end date "+sded[1]+" in "+taskevent);
+        if (sded.length>2) d3.select('#errors').append("p").text("Date period in "+taskevent+" is split into more than 2 dates: " +sded);
+			//alert("Date period in "+taskevent+" is split into more than 2 dates: " +sded);
         return [sd,ed];
     };
    
@@ -345,7 +348,8 @@ function PlotGanntChart(data) {
     function pulldates(data,field) {
         return data.map(function(d){
             var date = new Date(d[field]);
-            if (d[field] && isNaN( date.getTime() ) ) alert("Invalid " + field +" "+d[field]+" in "+d[TaskLabel]+" / "+d.Type);
+            if (d[field] && isNaN( date.getTime() ) ) d3.select('#errors').append("p").text("Invalid " + field +" "+d[field]+" in "+d[TaskLabel]+" / "+d.Type);
+				//alert("Invalid " + field +" "+d[field]+" in "+d[TaskLabel]+" / "+d.Type);
             return new Date(d[field]);
         })
     };
@@ -360,7 +364,10 @@ function PlotGanntChart(data) {
     var min = minmaxdates[0];
     var max = minmaxdates[1];
 
-    if ((max-min)*3.17e-11>5) alert("The timespan of the chart is more than 5 years! Check for typos");
+    if ((max-min)*3.17e-11>5) {
+		d3.select('#errors').append("p").text("The timespan of the chart is more than 5 years! Check for typos")
+		//alert("The timespan of the chart is more than 5 years! Check for typos");
+	}
 
     var width = +document.getElementById('width').value;
     var monthcaptrate = +document.getElementById('monthcaptrate').value;
