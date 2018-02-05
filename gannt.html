@@ -22,11 +22,11 @@
     
     //width = 400;
 </script>
-<script src="https://access.econometricainc.com/workplace/access/exec/file/excellentexport.min.js"></script>
-<script src="https://access.econometricainc.com/workplace/access/exec/file/jszip.js"></script>
-<script src="https://access.econometricainc.com/workplace/access/exec/file/xlsx.js"></script>
-<script src="https://access.econometricainc.com/workplace/access/exec/file/d3.min.js"></script>
-<script src="https://access.econometricainc.com/workplace/access/exec/file/melt.js"></script>
+<script src="excellentexport.min.js"></script>
+<script src="jszip.js"></script>
+<script src="xlsx.js"></script>
+<script src="d3.min.js"></script>
+<script src="melt.js"></script>
 
 <style>
     table, th, td {
@@ -50,6 +50,7 @@
         This tool is supposed to be very simple to use and does not require anything but a web browser (tested in Google Chrome, will NOT work in IE).
         The template table below is an example of how data should be organized to produce the output at the bottom of the page<br><br>
 
+		<h2><font color="red">Read the instructions below (push the button) if you haven't before</font></h2>
         <button onclick="shinst();">Show/Hide Instructions</button><br><br>
 
         <ol id="instructions" style="display:none">
@@ -190,7 +191,7 @@ function PrintTable(example) {
              row.append("td").data([{"row":i,"col":j,"data":example}]).text(example[i][j]).attr("contenteditable",true)
                 .on('mouseout',function(d) {
                     d.data[d.row][d.col]=this.innerText;
-                    PlotGanntChart(d.data);
+                    //PlotGanntChart(d.data);
                 });
     };
     //d3.select("body").selectAll("img").data(example).enter().append("img").attr("src",function(d) {return d.Image})
@@ -424,8 +425,7 @@ function PlotGanntChart(data) {
     //Task titles on the left
     var MakeyAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-width).tickFormat(TaskTitle);
     var yax=chartarea.append("g").attr("class", "y axis").call(MakeyAxis);
-    yax.selectAll(".tick text").call(wrap,1);
-    
+	
     //For groups/sections, print once again to make them bolder
     var MakeyAxisSections = d3.svg.axis().scale(yScale).orient("left").tickSize(0).tickValues(tasksections).tickFormat(TaskTitle);
     chartarea.append("g").attr("class", "y axis").call(MakeyAxisSections).selectAll(".tick text").call(wrap,1);
@@ -433,9 +433,9 @@ function PlotGanntChart(data) {
     //Task numbers
     var MakeyAxisNum = d3.svg.axis().scale(yScale).orient("left").tickSize(-width).tickFormat(TaskNumber);
     var yaxn=chartarea.append("g").attr("class", "y axis").call(MakeyAxisNum)
-   
-
-
+	
+	 yax.selectAll(".tick text").call(wrap,1);
+	
     function wrap(text, width) {
 
         text.each(function() {
@@ -467,8 +467,8 @@ function PlotGanntChart(data) {
     };
 
     var labelareawidth = Math.ceil(
-        d3.max(yax.selectAll(".tick text")[0].map(function(d) {return d.getComputedTextLength()}))
-        +d3.max(yaxn.selectAll(".tick text")[0].map(function(d) {return d.getComputedTextLength()}))
+        d3.max(yax.selectAll(".tick text")[0].map(function(d) {return d.getBBox().width}))
+        +d3.max(yaxn.selectAll(".tick text")[0].map(function(d) {return d.getBBox().width}))
         );
 
 
@@ -523,7 +523,7 @@ function PlotGanntChart(data) {
         return d3.time.format(s)(date);
         //return (d3.time.format("%b")(date)===d3.time.format("%b")(date)===)d3.time.format("%b. %e, %Y")(date);
     };
-
+	
     chartarea.selectAll("rect .ongoing").data(data.filter(function(d){return (d.Type===Ongoing)})).enter()
         .append("rect")
         .attr("class",function(d){return (d.Group==="" || d.Group===undefined)?"ongoing":"grouprect";})
