@@ -22,7 +22,11 @@
     
     //width = 400;
 </script>
-<script src="excellentexport.min.js"></script>
+<script src="https://access.econometricainc.com/workplace/access/exec/file/excellentexport.min.js"></script>
+<script src="https://access.econometricainc.com/workplace/access/exec/file/jszip.js"></script>
+<script src="https://access.econometricainc.com/workplace/access/exec/file/xlsx.js"></script>
+<script src="https://access.econometricainc.com/workplace/access/exec/file/d3.min.js"></script>
+<script src="https://access.econometricainc.com/workplace/access/exec/file/melt.js"></script>
 
 <style>
     table, th, td {
@@ -161,10 +165,7 @@
         </style>
     </svg>
 
-<script src="jszip.js"></script>
-<script src="xlsx.js"></script>
-<script src="d3.min.js"></script>
-<script src="melt.js"></script>
+
 
 
 <script>
@@ -246,7 +247,7 @@ function PlotGanntChart(data) {
     PrintTable(data);
     //d3.selectAll("body").append("text").text(JSON.stringify(data));
 
-    var margin = {top: 20, right: 20, bottom: 20, left: 10};
+    var margin = {top: 20, right: 30, bottom: 20, left: 10};
     //Find the field name for Ongoing work and TaskLabel
     var keys=[]; for (var key in data[0]) keys.push(key); var TaskLabel = keys[0]; var Ongoing = keys[1];
     //var TaskLabel="TASK", Ongoing="Ongoing Contractor Work";
@@ -364,8 +365,12 @@ function PlotGanntChart(data) {
     var monthcaptrate = +document.getElementById('monthcaptrate').value;
     var monthgridrate = +document.getElementById('monthgridrate').value;
 
+    //max=d3.time.month.ceil(max)
+    //max.setDate(max.getDate()-1)
+
     var xScale = d3.time.scale().domain([d3.time.month.floor(min),d3.time.month.ceil(max)]).range([0,width]);
 
+    
     var yScale = d3.scale.ordinal().domain(taskdomain).rangeBands([0,taskdomain.length*BarHeight*(BarPadding+1)],BarPadding);
     
     var sScale = d3.scale.ordinal().domain(eventsdomain)
